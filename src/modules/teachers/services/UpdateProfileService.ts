@@ -14,7 +14,7 @@ interface IResponse {
 }
 
 interface IRequest {
-  teacher_id: string;
+  user_id: string;
   whatsapp: string;
   biography: string;
   subject_id: number;
@@ -33,14 +33,14 @@ class UpdateProfileService {
   ) {}
 
   public async execute({
-    teacher_id,
+    user_id,
     whatsapp,
     biography,
     subject_id,
     cost,
     schedules,
   }: IRequest): Promise<IResponse> {
-    const teacher = await this.teachersRepository.findById(teacher_id);
+    const teacher = await this.teachersRepository.findById(user_id);
 
     if (!teacher) {
       console.log('Teacher not found');
