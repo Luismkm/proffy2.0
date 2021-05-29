@@ -19,4 +19,18 @@ export default class SchedulesRepository implements ISchedulesRepository {
 
     return schedule;
   }
+
+  public async findById(id: string): Promise<Schedule[] | undefined> {
+    const schedule = this.ormRepository.find({
+      where: {
+        teacher_id: id,
+      },
+    });
+
+    return schedule;
+  }
+
+  public async save(schedule: any): Promise<Schedule[]> {
+    return this.ormRepository.save(schedule);
+  }
 }
