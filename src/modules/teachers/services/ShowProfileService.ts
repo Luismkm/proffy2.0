@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
@@ -13,7 +14,7 @@ interface IResponse {
 }
 
 interface IRequest {
-  teacher_id: string;
+  id: string;
 }
 
 @injectable()
@@ -26,16 +27,16 @@ class ShowProfileService {
     private schedulesRepository: ISchedulesRepository,
   ) {}
 
-  public async execute({ teacher_id }: IRequest): Promise<IResponse> {
-    const teacher = await this.teachersRepository.findById(teacher_id);
+  public async execute({ id }: IRequest): Promise<IResponse> {
+    const teacher = await this.teachersRepository.findById(id);
 
     if (!teacher) {
       console.log('Teacher not found.');
     }
 
-    const schedule = await this.schedulesRepository.findById(teacher_id);
+    const schedule = await this.schedulesRepository.findById(teacher.id);
 
-    return { teacher, schedule };
+    return { teacher: classToClass(teacher), schedule: classToClass(schedule) };
   }
 }
 
