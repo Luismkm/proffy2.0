@@ -19,4 +19,13 @@ export default class TeachersRepository implements ITeachersRepository {
 
     return teacher;
   }
+
+  public async findById(id: string): Promise<Teacher | undefined> {
+    const teacher = await this.ormRepository.findOne(id);
+    return teacher;
+  }
+
+  public async save(teacher: Teacher): Promise<Teacher> {
+    return this.ormRepository.save(teacher);
+  }
 }
