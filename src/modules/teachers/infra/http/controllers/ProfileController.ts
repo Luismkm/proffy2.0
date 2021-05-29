@@ -1,29 +1,30 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ShowProfileService from '@modules/teachers/services/ShowProfileService';
 import UpdateProfileService from '@modules/teachers/services/UpdateProfileService';
 
 export default class ProfileController {
   public async show(request: Request, response: Response): Promise<Response> {
-    const teacher_id = request.teacher.id;
+    const { id } = request.user;
 
     const showProfile = container.resolve(ShowProfileService);
 
-    const teacher = await showProfile.execute({ teacher_id });
+    const teacher = await showProfile.execute({ id });
 
     return response.json(teacher);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const teacher_id = 'd71f7a72-9e06-4fdd-8950-bac8cf3f0cf1';
+    const user_id = request.user.id;
 
     const { whatsapp, biography, subject_id, cost, schedules } = request.body;
 
     const updateTeacher = container.resolve(UpdateProfileService);
 
     const teacher = await updateTeacher.execute({
-      teacher_id,
+      user_id,
       whatsapp,
       biography,
       subject_id,
@@ -31,6 +32,6 @@ export default class ProfileController {
       schedules,
     });
 
-    return response.json(teacher);
+    return response.json({ teacher: classToClass(teacher) });
   }
 }

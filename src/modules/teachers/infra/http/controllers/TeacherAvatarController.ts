@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UpdateTeacherAvatarService from '@modules/teachers/services/UpdateTeacherAvatarService';
 
@@ -8,11 +9,11 @@ export default class TeacherAvatarController {
     const updateTeacherAvatar = container.resolve(UpdateTeacherAvatarService);
 
     const teacher = await updateTeacherAvatar.execute({
-      teacher_id: request.teacher.id,
+      teacher_id: request.user.id,
 
       avatarFilename: request.file.filename,
     });
 
-    return response.json(teacher);
+    return response.json({ teacher: classToClass(teacher) });
   }
 }
