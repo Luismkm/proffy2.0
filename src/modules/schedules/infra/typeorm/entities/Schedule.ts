@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Exclude } from 'class-transformer';
+
 import Weekday from '../../../../subjects/infra/typeorm/entities/Weekday';
 import Teacher from '../../../../teachers/infra/typeorm/entities/Teacher';
 
@@ -17,6 +19,7 @@ export default class Schedules {
   id: string;
 
   @Column()
+  @Exclude()
   teacher_id: string;
 
   @ManyToOne(() => Teacher)
@@ -24,6 +27,7 @@ export default class Schedules {
   teacher: Teacher;
 
   @Column()
+  @Exclude()
   day_id: number;
 
   @ManyToOne(() => Weekday)
@@ -37,8 +41,10 @@ export default class Schedules {
   to: number;
 
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
 }

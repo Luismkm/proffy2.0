@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Exclude, Expose } from 'class-transformer';
+
 import Subjects from '../../../../subjects/infra/typeorm/entities/Subject';
 
 @Entity('teachers')
@@ -28,6 +30,7 @@ export default class Teachers {
   biography: string;
 
   @Column()
+  @Exclude()
   subject_id: number;
 
   @ManyToOne(() => Subjects)
@@ -38,8 +41,17 @@ export default class Teachers {
   cost: string;
 
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
+
+  @Expose({ name: 'avatar_url' })
+  getAvatarUrl(): string {
+    return this.avatar
+      ? `${process.env.APP_API_URL}/files/${this.avatar}`
+      : null;
+  }
 }
