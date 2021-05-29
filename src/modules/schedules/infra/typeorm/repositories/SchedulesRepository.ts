@@ -25,6 +25,7 @@ export default class SchedulesRepository implements ISchedulesRepository {
       where: {
         teacher_id: id,
       },
+      relations: ['weekday'],
     });
 
     return schedule;
