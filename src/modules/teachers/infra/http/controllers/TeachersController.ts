@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import CreateTeacherService from '@modules/teachers/services/TeacherUserService';
+import CreateTeacherService from '@modules/teachers/services/CreateTeacherService';
 
 export default class TeachersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { user_id, whatsapp, biography, subject_id, cost, schedules } =
       request.body;
 
-    // console.log(request.body);
-
     const createTeacher = container.resolve(CreateTeacherService);
 
-    const teacher = await createTeacher.execute({
+    const teacherAndSchedule = await createTeacher.execute({
       user_id,
       whatsapp,
       biography,
@@ -21,6 +19,6 @@ export default class TeachersController {
       schedules,
     });
 
-    return response.json({ teacher });
+    return response.json(teacherAndSchedule);
   }
 }
