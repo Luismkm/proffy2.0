@@ -43,7 +43,7 @@ class UpdateProfileService {
     const teacher = await this.teachersRepository.findById(user_id);
 
     if (!teacher) {
-      console.log('Teacher not found');
+      throw new AppError('Teacher not found.');
     }
 
     teacher.whatsapp = whatsapp;

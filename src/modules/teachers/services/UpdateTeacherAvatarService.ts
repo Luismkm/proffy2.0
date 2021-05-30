@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 
+import AppError from '@shared/errors/AppError';
 import Teacher from '../infra/typeorm/entities/Teacher';
 import ITeachersRepository from '../repositories/ITeachersRepository';
 
@@ -27,7 +28,7 @@ export default class UpdateTeacherAvatarService {
     const teacher = await this.teachersRepository.findById(teacher_id);
 
     if (!teacher) {
-      console.log('Only authenticated');
+      throw new AppError('Teacher not found.');
     }
 
     if (teacher.avatar) {
