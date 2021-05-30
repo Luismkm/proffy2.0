@@ -31,7 +31,7 @@ export default class SchedulesRepository implements ISchedulesRepository {
     return schedule;
   }
 
-  public async save(schedule: any): Promise<Schedule[]> {
+  public async save(schedule: Schedule[]): Promise<Schedule[]> {
     return this.ormRepository.save(schedule);
   }
 }

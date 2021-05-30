@@ -12,7 +12,7 @@ export default class TeachersRepository implements ITeachersRepository {
     this.ormRepository = getRepository(Teacher);
   }
 
-  public async create(teacherData: ICreateTeacherDTO): Promise<any> {
+  public async create(teacherData: ICreateTeacherDTO): Promise<Teacher> {
     const teacher = this.ormRepository.create(teacherData);
 
     await this.ormRepository.save(teacher);
@@ -23,7 +23,6 @@ export default class TeachersRepository implements ITeachersRepository {
   public async findById(user_id: string): Promise<Teacher | undefined> {
     const teacher = await this.ormRepository.findOne({
       where: { user_id },
-      relations: ['subject'],
     });
     return teacher;
   }
