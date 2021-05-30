@@ -10,7 +10,7 @@ import {
 
 import { Exclude, Expose } from 'class-transformer';
 
-import Subjects from '../../../../subjects/infra/typeorm/entities/Subject';
+import Subjects from './Subject';
 
 @Entity('teachers')
 export default class Teachers {
@@ -30,7 +30,6 @@ export default class Teachers {
   biography: string;
 
   @Column()
-  @Exclude()
   subject_id: number;
 
   @ManyToOne(() => Subjects)

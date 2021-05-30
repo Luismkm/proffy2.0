@@ -10,7 +10,7 @@ import {
 
 import { Exclude } from 'class-transformer';
 
-import Weekday from '../../../../subjects/infra/typeorm/entities/Weekday';
+import Weekday from './Weekday';
 import Teacher from '../../../../teachers/infra/typeorm/entities/Teacher';
 
 @Entity('schedules')
