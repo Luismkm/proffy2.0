@@ -3,6 +3,7 @@ import authConfig from '@config/auth';
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -26,6 +27,9 @@ class AuthenticateUserService {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('TeachersRepository')
+    private teachersRepository: ITeachersRepository,
   ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -44,9 +48,13 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
+    const teacher = await this.teachersRepository.findById(user.id);
+
+    const isTeacher = !!teacher;
+
     const { secret, expiresIn } = authConfig.jwt;
 
-    const token = sign({}, secret, {
+    const token = sign({ isTeacher }, secret, {
       subject: user.id,
       expiresIn,
     });

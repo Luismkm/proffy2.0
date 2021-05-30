@@ -9,6 +9,7 @@ interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
+  isTeacher: boolean;
 }
 
 export default function ensureAuthenticated(
@@ -27,10 +28,11 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as ITokenPayload;
+    const { sub, isTeacher } = decoded as ITokenPayload;
 
     request.user = {
       id: sub,
+      isTeacher,
     };
 
     return next();
