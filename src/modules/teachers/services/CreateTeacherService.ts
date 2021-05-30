@@ -3,9 +3,15 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import ISchedulesRepository from '@modules/schedules/repositories/ISchedulesRepository';
 import convertHourToMinutes from '@shared/utils/convertHourToMinutes';
+import Schedule from '@modules/schedules/infra/typeorm/entities/Schedule';
 import ITeachersRepository from '../repositories/ITeachersRepository';
 
 import Teacher from '../infra/typeorm/entities/Teacher';
+
+interface IResponse {
+  teacher: Teacher;
+  schedule: Schedule[];
+}
 
 interface ISchedulesData {
   teacher_id?: string;
@@ -40,7 +46,13 @@ class CreateTeacherService {
     cost,
     subject_id,
     schedules,
-  }: IRequest): Promise<any> {
+  }: IRequest): Promise<IResponse> {
+    const checkTeacherExists = await this.teachersRepository.findById(user_id);
+
+    if (checkTeacherExists) {
+      throw new AppError('You are already registered as a teacher');
+    }
+
     const teacher = await this.teachersRepository.create({
       user_id,
       whatsapp,
@@ -48,6 +60,10 @@ class CreateTeacherService {
       subject_id: Number(subject_id),
       cost,
     });
+
+    if (!teacher) {
+      throw new AppError('An error occurred when registering.', 500);
+    }
 
     const { id } = teacher;
 
@@ -60,6 +76,10 @@ class CreateTeacherService {
     });
 
     const schedule = await this.schedulesRepository.create(schedules);
+
+    if (!teacher) {
+      throw new AppError('An error occurred while registering schedule.', 500);
+    }
 
     return { teacher, schedule };
   }
